@@ -1,0 +1,15 @@
+Transacciones:
+
+ID_transacción (clave primaria)
+ID_cliente (clave foránea hacia Clientes)
+Fecha
+Tipo (compra, pago, etc.)
+Monto
+CuentaCorriente:
+
+ID_cuenta (clave primaria)
+ID_cliente (clave foránea hacia Clientes)
+Saldo
+Establece relaciones entre estas tablas para reflejar la relación entre clientes, artículos y transacciones. Registra cada compra como una transacción positiva en la cuenta corriente del cliente y los pagos como transacciones negativas. Actualiza el saldo en la tabla CuentaCorriente en consecuencia.
+
+Este diseño te permitirá realizar consultas para obtener el historial de transacciones, saldos actuales y otros detalles relacionados con las compras y cuentas corrientes.

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block link%} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">
+{% endblock%}
+
+{% block content %}
+
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            Fecha: 
+                            <input class="form-control-sm" id="fecha" type="date" value="{{ fecha }}" style="width: auto;">
+                        </th>
+                        <th scope="col">
+                            Proveedor:
+                            <select class="proveedores" id="proveedores">
+                                {% for proveedor in proveedores %}
+                                <option value="{{ proveedor.id }}">{{proveedor.razonsocial}}</option>
+                                {% endfor %}
+                            </select>    
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="table-responsive">
+            <h5 class="titulo-carrito">{% block title %}Carrito de Compras{% endblock %}</h5>
+            <table class="table carrito" id="carrito">
+                <tbody>
+                <!-- Los elementos del carrito se agregarán aquí -->
+
+                </tbody>
+            </table>
+            <div class="titulo-total">Total: <span id="total">0.00</span></div>
+            <div class="botones-acciones">
+                <a href="{{url_for('articulos.crear')}}" class="btn btn-success btn-sm">Nuevo</a>
+                <button class="vaciar-carrito" id="vaciar-carrito" disabled>Vaciar Carrito</button>
+                <select class="metodo-pago" id="metodo-pago">
+                    <option value="E">Efectivo</option>
+                    <option value="B">Billetera</option>
+                </select>
+                <button class="finalizar-compra" id="finalizar-compra" disabled>Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <h5 class="titulo-articulos">Lista de Artículos</h5>
+        <div class="container-fluid">
+            <form class="formulario-buscar" method="get">
+                <input class="form-control form-control-sm me-2" type="search" placeholder="Buscar..." aria-label="Search" name="q">
+                <button class="btn btn-outline-success btn-sm" type="submit">Buscar</button>
+            </form>
+        </div>
+    </div>
+
+    <divc class="container">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Articulo</th>
+                        <th>Stock</th>
+                        <th>Costo</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-articulos">
+                    {% for articulo in articulos %}
+                        <tr>
+                            <td>{{articulo.articulo}}</td>
+                            <td>{{ articulo.stock }}</td>
+                            <td><input type="text" class="costo" value="{{ articulo.costo }}"></td>
+                            <td><input type="text" class="precio" value="{{ articulo.precio }}"></td>
+                            <td><input type="number" class="cantidad" value="1" min="1"></td>
+                            <td data-id="{{ articulo.id }}" data-nombre="{{ articulo.articulo }}"><button class="agregar"><i class="bi bi-plus-circle-fill"></i></button></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/carrito_compra.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}

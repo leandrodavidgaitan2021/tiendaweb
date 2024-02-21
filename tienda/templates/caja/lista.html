@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+
+
+{% block link%} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_caja.css') }}"> 
+{% endblock%}
+
+{% block content %}
+
+    <h5 class="m-3">{% block title %}Caja{% endblock %} Fecha: {{ fecha }}</h5> 
+
+    <div id="collapse1">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Caja</th>
+                    <th scope="col">Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for caja in cajas %}
+                    <tr>
+                        <td scope="row">
+                            {{ caja.fecha }}
+                        </td>
+                        <td>
+                            {{ caja.tipo }}
+                        </td>
+                        <td>
+                            {{ caja.caja }}
+                        </td>
+                        <td>
+                            {{ caja.monto }}
+                        </td>
+                        <td>
+                            <a href="{{url_for('cajas.ver_operacion', id = caja.id)}}" class="btn btn-info btn-sm">Ver</a>
+                        </td>
+                    </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+
+    </div>
+    <hr>
+    <div class="m-3">
+        <h5>Totales</h5>
+
+        <div>Total Compra Efectivo = {{ t_e_compra }}</div>
+        <div>Total Compra Billetera = {{ t_b_compra }}</div>
+        {% set total_compra = t_e_compra + t_b_venta + t_c_compra %}
+        <div>Total Compra = {{ total_compra }}</div>        
+        
+        
+        <div>Total Venta Efectivo = {{ t_e_venta }}</div> 
+        <div>Total Venta Billetera = {{ t_b_venta }}</div>
+        <div>Total Venta Cuenta Corriente = {{ t_c_venta }}</div>
+        
+        <div>Total Cobrado en Efectivo Cuenta Corriente = {{ t_p_e_venta }}</div>
+        <div>Total Cobrado en Billetera Cuenta Corriente = {{ t_p_b_venta }}</div>
+        
+        {% set total_venta = t_e_venta + t_b_venta + t_c_venta %}
+        <div>Total Venta = {{ total_venta }}</div>
+        
+        <div>Total Billetera a Efectivo = {{ t_transf_a_efectivo }}</div>
+        <div>Total Efectivo a Billetera = {{ t_transf_a_billetera }}</div>
+
+        {% set total_efectivo = t_e_venta - t_e_compra + t_transf_a_efectivo - t_transf_a_billetera + t_p_e_venta %}
+        <div>Total Efectivo = {{ total_efectivo }}</div>
+        
+        {% set total_billetera = t_b_venta - t_b_compra + t_transf_a_billetera - t_transf_a_efectivo + t_p_b_venta %}
+        <div>Total Billetera = {{ total_billetera }}</div> 
+
+        <div>Total: {{ total_efectivo + total_billetera }}</div>       
+
+    </div>
+    <hr>
+
+    <div class="d-grid gap-2 col-10 mx-auto">
+        <h4 class="text-center">Transferencias</h4>
+
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="fecha">Fecha:</label>
+                <input type="date" class="form-control" id="fecha" value="{{ fecha }}">
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="opcion">Tipo:</label>
+                <select class="form-select" id="opcion">
+                    <option value="A EFECTIVO">BILLETERA A EFECTIVO</option>
+                    <option value="A BILLETERA">EFECTIVO A BILLETERA</option>
+                </select>
+            </div>
+            
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="monto">Monto</label>
+                <input type="number" class="form-control" id="monto" >
+            </div>
+        
+            <div class="text-center">
+                <button class="btn btn-primary" id="aceptar">Tranferir</button>
+                <button class="btn btn-secondary" id="cancelar" onclick="window.close()">Cancelar</button>
+            </div>
+        </div>
+
+
+    <!-- Resultados seleccionados de la ventana emergente -->
+    <div id="resultados"></div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', filename='js/caja.js') }}"></script>
+{% endblock %}
+
